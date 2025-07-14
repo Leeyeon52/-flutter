@@ -38,13 +38,16 @@ GoRouter createRouter(String baseUrl) {
         path: '/d_home',
         builder: (context, state) {
           final passedBaseUrl = state.extra as String? ?? baseUrl;
-          return DoctorHomeScreen(baseUrl: passedBaseUrl); // ✅ baseUrl 전달
+          return DoctorHomeScreen(baseUrl: passedBaseUrl);
         },
         routes: [],
       ),
       ShellRoute(
         builder: (context, state, child) {
-          return MainScaffold(child: child, currentLocation: state.uri.toString());
+          return MainScaffold(
+            child: child,
+            currentLocation: state.uri.toString(),
+          );
         },
         routes: [
           GoRoute(
@@ -65,7 +68,15 @@ GoRouter createRouter(String baseUrl) {
           ),
           GoRoute(
             path: '/upload',
-            builder: (context, state) => const UploadScreen(),
+            builder: (context, state) {
+              final data = state.extra as Map<String, dynamic>? ?? {};
+              final userId = data['userId'] ?? 'guest';
+              final passedBaseUrl = data['baseUrl'] ?? baseUrl;
+              return UploadScreen(
+                userId: userId,
+                baseUrl: passedBaseUrl,
+              );
+            },
           ),
           GoRoute(
             path: '/diagnosis/realtime',
