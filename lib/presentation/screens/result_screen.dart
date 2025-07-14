@@ -22,10 +22,13 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     final String baseImageUrl = widget.imageUrl;
-    final String overlayImageUrl = widget.imageUrl; // ✅ 오버레이는 서버에서 같은 경로로 응답했다고 가정
+    final String overlayImageUrl = widget.imageUrl; // 오버레이도 같은 이미지 경로 사용
 
     final prediction = widget.inferenceData['prediction'] ?? '결과 없음';
     final details = widget.inferenceData['details'] ?? [];
+
+    // 하나라도 오버레이가 켜져 있으면 오버레이 이미지 사용
+    final bool useOverlay = showOverlay1 || showOverlay2 || showOverlay3;
 
     return Scaffold(
       appBar: AppBar(
@@ -35,13 +38,11 @@ class _ResultScreenState extends State<ResultScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // ✅ 이미지 영역
+            // 이미지 영역 (오버레이 적용 여부에 따라 이미지 변경)
             Expanded(
               child: Center(
                 child: Image.network(
-                  (showOverlay1 || showOverlay2 || showOverlay3)
-                      ? overlayImageUrl
-                      : baseImageUrl,
+                  useOverlay ? overlayImageUrl : baseImageUrl,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -49,7 +50,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
             const SizedBox(height: 12),
 
-            // ✅ 스위치 3개 (오버레이 옵션)
+            // 오버레이 옵션 스위치 3개
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -67,16 +68,20 @@ class _ResultScreenState extends State<ResultScreen> {
 
             const SizedBox(height: 8),
 
-            // ✅ 진단 결과 텍스트
+            // AI 예측 결과 텍스트
             Text(
               '🔍 AI 예측 결과: $prediction',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
 
             if (details.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 6),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
                     details.length,
                     (i) => Text('・${details[i]}'),
@@ -86,7 +91,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
             const SizedBox(height: 16),
 
-            // ✅ 버튼 2개 (저장, 비대면 진료)
+            // 저장 및 AI 비대면 진료 버튼
             Row(
               children: [
                 Expanded(
@@ -94,7 +99,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     icon: const Icon(Icons.save_alt),
                     label: const Text("이미지 저장"),
                     onPressed: () {
-                      // TODO: 저장 로직 구현
+                      // TODO: 이미지 저장 기능 구현 예정
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('이미지를 저장했습니다.')),
                       );
@@ -108,7 +113,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     label: const Text("AI 비대면 진료"),
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                     onPressed: () {
-                      // TODO: 비대면 진료 신청 로직 구현
+                      // TODO: AI 비대면 진료 신청 기능 구현 예정
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('AI 비대면 진료 신청이 완료되었습니다.')),
                       );
@@ -123,6 +128,7 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
+  // 라벨과 스위치가 세로로 배치된 위젯
   Widget _buildSwitch(String label, bool value, ValueChanged<bool> onChanged) {
     return Column(
       children: [

@@ -20,7 +20,6 @@ import 'package:ultralytics_yolo_example/presentation/viewmodel/clinics_viewmode
 import 'presentation/viewmodel/appointment_viewmodel.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
   const String globalBaseUrl = "http://192.168.0.19:5000";

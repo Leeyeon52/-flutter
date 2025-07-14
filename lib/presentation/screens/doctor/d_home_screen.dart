@@ -106,7 +106,7 @@ class DoctorHomeScreen extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics),
-            label: '진단 결과',
+            label: '환자 현황',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),

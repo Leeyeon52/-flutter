@@ -106,9 +106,10 @@ class _UploadScreenState extends State<UploadScreen> {
     });
 
     try {
-      // 백엔드 app.py에서 upload_bp가 '/api' 접두사로 등록되어 있으므로,
-      // URL에 '/api' 접두사를 추가합니다.
-      final uri = Uri.parse("${widget.baseUrl}/api/upload_image");
+      // 💡💡💡 이 URL이 백엔드 Flask 서버의 실제 이미지 업로드 라우트와 정확히 일치해야 합니다. 💡💡💡
+      // 백엔드 app.py 또는 routes/upload_routes.py 파일을 확인하세요.
+      // 예: /api/upload_image, /api/upload, /upload_image 등
+      final uri = Uri.parse("${widget.baseUrl}/api/upload_image"); // 현재 설정된 URL
       print("진단 요청 URL: $uri"); // 디버깅을 위해 최종 요청 URL을 출력합니다.
 
       final request = http.MultipartRequest('POST', uri);
@@ -117,13 +118,16 @@ class _UploadScreenState extends State<UploadScreen> {
       if (kIsWeb && _selectedImageBytes != null) {
         // 웹인 경우, 바이트 데이터로 MultipartFile을 생성합니다.
         request.files.add(http.MultipartFile.fromBytes(
-          'image', // 서버에서 기대하는 필드 이름 (백엔드와 일치해야 함)
+          'file', // 서버에서 기대하는 필드 이름 (백엔드와 일치해야 함)
           _selectedImageBytes!,
           filename: 'upload.jpg', // 웹에서는 파일 이름이 필요합니다.
         ));
       } else if (_selectedImageFile != null) {
         // 모바일/데스크톱인 경우, File 객체 경로로 MultipartFile을 생성합니다.
-        request.files.add(await http.MultipartFile.fromPath('image', _selectedImageFile!.path));
+        request.files.add(await http.MultipartFile.fromPath(
+          'file', // 서버에서 기대하는 필드 이름 (백엔드와 일치해야 함)
+          _selectedImageFile!.path,
+        ));
       } else {
         // 이미지 데이터가 유효하지 않은 경우 예외를 발생시킵니다.
         throw Exception("이미지 데이터가 유효하지 않습니다.");
@@ -204,7 +208,7 @@ class _UploadScreenState extends State<UploadScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              // 💡💡💡 수정: 웹 환경에 따라 다른 이미지 위젯을 사용하여 미리보기를 표시합니다. 💡�💡
+              // 💡💡💡 수정: 웹 환경에 따라 다른 이미지 위젯을 사용하여 미리보기를 표시합니다. 💡💡💡
               (_selectedImageFile != null || _selectedImageBytes != null)
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
