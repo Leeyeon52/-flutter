@@ -27,7 +27,8 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
 
     try {
-      final res = await http.get(Uri.parse('$_baseUrl/auth/check-username?username=$userId&role=$role'));
+      // 💡 수정: '/api' 접두사 추가
+      final res = await http.get(Uri.parse('$_baseUrl/api/auth/check-username?username=$userId&role=$role'));
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
         return data['exists'] == true;
@@ -72,8 +73,9 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
 
     try {
+      // 💡 수정: '/api' 접두사 추가
       final res = await http.post(
-        Uri.parse('$_baseUrl/auth/register'),
+        Uri.parse('$_baseUrl/api/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(userData),
       );
@@ -113,8 +115,9 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
 
     try {
+      // 💡 수정: '/api' 접두사 추가
       final res = await http.post(
-        Uri.parse('$_baseUrl/auth/login'),
+        Uri.parse('$_baseUrl/api/auth/login'), // <-- 여기에 /api 추가
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'register_id': registerId, 'password': password, 'role': role}),
       );
@@ -165,8 +168,9 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
 
     try {
+      // 💡 수정: '/api' 접두사 추가
       final res = await http.delete(
-        Uri.parse('$_baseUrl/auth/delete_account'),
+        Uri.parse('$_baseUrl/api/auth/delete_account'), // <-- 여기에 /api 추가
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'username': registerId, 'password': password, 'role': role}),
       );

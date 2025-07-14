@@ -22,7 +22,7 @@ Future<void> main() async {
   // ✅ .env 파일 로드 (가장 먼저 실행되어야 함)
   await dotenv.load(fileName: ".env");
 
-  const String globalBaseUrl = "http://192.168.0.19:5000/api";
+  const String globalBaseUrl = "http://192.168.0.19:5000";
 
   // ✅ GEMINI_API_KEY 가져오기
   final String? geminiApiKey = dotenv.env['GEMINI_API_KEY'];

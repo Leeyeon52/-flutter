@@ -139,7 +139,7 @@ class DoctorHomeScreen extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: '진료 캘린더',
+            label: '에약 현황',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people_alt),

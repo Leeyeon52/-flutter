@@ -18,6 +18,8 @@ import '/presentation/screens/upload_screen.dart';
 import '/presentation/screens/history_screen.dart';
 import '/presentation/screens/clinics_screen.dart';
 
+import '/presentation/screens/result_screen.dart'; // ✅ 결과 화면 임포트
+
 GoRouter createRouter(String baseUrl) {
   return GoRouter(
     initialLocation: '/login',
@@ -41,6 +43,18 @@ GoRouter createRouter(String baseUrl) {
           return DoctorHomeScreen(baseUrl: passedBaseUrl);
         },
         routes: [],
+      ),
+      GoRoute(
+        path: '/result', // ✅ 결과 화면 경로 추가
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>? ?? {};
+          final imageUrl = data['imageUrl'] as String? ?? '';
+          final inferenceData = data['inferenceData'] as Map<String, dynamic>? ?? {};
+          return ResultScreen(
+            imageUrl: imageUrl,
+            inferenceData: inferenceData,
+          );
+        },
       ),
       ShellRoute(
         builder: (context, state, child) {
