@@ -7,38 +7,9 @@ import '/presentation/viewmodel/auth_viewmodel.dart';
 import '/presentation/screens/doctor/d_patient_list_screen.dart';
 import '/presentation/screens/doctor/d_inference_result_screen.dart';
 import '/presentation/viewmodel/doctor/d_dashboard_viewmodel.dart';
+import '/presentation/screens/doctor/d_appointment_screen.dart';
 
-// Note: DoctorMenu enum은 d_dashboard_viewmodel.dart에서 임포트됩니다.
-
-class CalendarScreen extends StatelessWidget {
-  const CalendarScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.calendar_today, size: 80, color: Colors.grey),
-            SizedBox(height: 20),
-            Text(
-              '진료 캘린더 기능은 현재 개발 중입니다.',
-              style: TextStyle(fontSize: 20, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              '곧 업데이트될 예정입니다!',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// DoctorMenu enum은 d_dashboard_viewmodel.dart에서 임포트됨
 
 class DoctorHomeScreen extends StatelessWidget {
   final String baseUrl;
@@ -87,7 +58,7 @@ class DoctorHomeScreen extends StatelessWidget {
         mainContent = InferenceResultScreen(baseUrl: baseUrl);
         break;
       case DoctorMenu.calendar:
-        mainContent = const CalendarScreen();
+        mainContent = const DoctorAppointmentScreen();
         break;
       case DoctorMenu.patientList:
         mainContent = const PatientListScreen();
@@ -105,11 +76,11 @@ class DoctorHomeScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent, // AppBar 배경색
-        elevation: 4, // AppBar 그림자
+        backgroundColor: Colors.blueAccent,
+        elevation: 4,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: Colors.white), // 아이콘 색상
+            icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () {
               authViewModel.logout();
               context.go('/login');
@@ -127,11 +98,11 @@ class DoctorHomeScreen extends StatelessWidget {
           }
           dashboardViewModel.setSelectedIndex(index);
         },
-        selectedItemColor: Colors.blueAccent, // 선택된 아이템 색상
-        unselectedItemColor: Colors.grey[600], // 선택되지 않은 아이템 색상
-        backgroundColor: Colors.white, // 배경색
-        elevation: 8, // 그림자
-        type: BottomNavigationBarType.fixed, // 아이템이 많아도 고정되도록
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey[600],
+        backgroundColor: Colors.white,
+        elevation: 8,
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics),
@@ -139,7 +110,7 @@ class DoctorHomeScreen extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: '에약 현황',
+            label: '예약 현황',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people_alt),

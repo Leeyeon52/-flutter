@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 // ✅ 필요한 화면들 임포트
 import '/presentation/screens/doctor/d_home_screen.dart';
 import '/presentation/screens/doctor/d_inference_result_screen.dart';
+import '/presentation/screens/doctor/d_appointment_screen.dart'; // 정확한 클래스명 import
 import '/presentation/screens/main_scaffold.dart';
 import '/presentation/screens/login_screen.dart';
 import '/presentation/screens/register_screen.dart';
@@ -17,8 +18,7 @@ import '/presentation/screens/mypage_screen.dart';
 import '/presentation/screens/upload_screen.dart';
 import '/presentation/screens/history_screen.dart';
 import '/presentation/screens/clinics_screen.dart';
-
-import '/presentation/screens/result_screen.dart'; // ✅ 결과 화면 임포트
+import '/presentation/screens/result_screen.dart'; // 결과 화면
 
 GoRouter createRouter(String baseUrl) {
   return GoRouter(
@@ -42,10 +42,16 @@ GoRouter createRouter(String baseUrl) {
           final passedBaseUrl = state.extra as String? ?? baseUrl;
           return DoctorHomeScreen(baseUrl: passedBaseUrl);
         },
-        routes: [],
       ),
+
+      // 수정된 부분: 정확한 화면 클래스명 사용
       GoRoute(
-        path: '/result', // ✅ 결과 화면 경로 추가
+        path: '/d_appointments',
+        builder: (context, state) => const DoctorAppointmentScreen(),
+      ),
+
+      GoRoute(
+        path: '/result',
         builder: (context, state) {
           final data = state.extra as Map<String, dynamic>? ?? {};
           final imageUrl = data['imageUrl'] as String? ?? '';
@@ -56,6 +62,7 @@ GoRouter createRouter(String baseUrl) {
           );
         },
       ),
+
       ShellRoute(
         builder: (context, state, child) {
           return MainScaffold(
@@ -71,8 +78,8 @@ GoRouter createRouter(String baseUrl) {
           GoRoute(
             path: '/home',
             builder: (context, state) {
-              final authViewModel = state.extra as Map<String, dynamic>?;
-              final userId = authViewModel?['userId'] ?? 'guest';
+              final authViewModelExtra = state.extra as Map<String, dynamic>?;
+              final userId = (authViewModelExtra?['userId'] as int?)?.toString() ?? 'guest';
               return HomeScreen(baseUrl: baseUrl, userId: userId);
             },
           ),
